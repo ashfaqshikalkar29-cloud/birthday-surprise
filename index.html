@@ -233,6 +233,28 @@
             animation: pulseGlow 6s ease-in-out infinite;
         }
 
+        /* Animated AI Voice Equalizer Bars */
+        @keyframes eqBounce {
+            0%, 100% { height: 4px; }
+            50% { height: 16px; }
+        }
+
+        .eq-bar {
+            width: 3px;
+            height: 4px;
+            border-radius: 9999px;
+            background: currentColor;
+            transition: height 0.15s ease;
+        }
+
+        .speaking-active .eq-bar {
+            animation: eqBounce 0.65s ease-in-out infinite;
+        }
+        .speaking-active .eq-bar:nth-child(1) { animation-delay: 0.0s; }
+        .speaking-active .eq-bar:nth-child(2) { animation-delay: 0.15s; }
+        .speaking-active .eq-bar:nth-child(3) { animation-delay: 0.3s; }
+        .speaking-active .eq-bar:nth-child(4) { animation-delay: 0.1s; }
+
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
@@ -410,6 +432,58 @@
                         ></textarea>
                     </div>
 
+                    <!-- AI Voice Persona Selector & Live Voice Preview -->
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="block text-sm font-semibold text-slate-200 flex items-center gap-1.5">
+                                <i class="fa-solid fa-microphone-lines text-pink-400"></i>
+                                <span>AI Voice Greeting Style</span>
+                            </label>
+                            <button
+                                type="button"
+                                id="testVoiceBtn"
+                                onclick="testCreatorVoice()"
+                                class="px-3 py-1 rounded-lg bg-pink-500/20 hover:bg-pink-500/30 border border-pink-500/40 text-pink-300 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
+                            >
+                                <i id="testVoiceIcon" class="fa-solid fa-volume-high"></i>
+                                <span id="testVoiceLabel">Test AI Voice</span>
+                            </button>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2.5" id="voicePersonaGrid">
+                            <button type="button" data-voice="bestie" onclick="selectVoicePersona('bestie')" class="voice-btn active-voice px-3.5 py-2.5 rounded-xl border border-pink-500 bg-pink-500/20 text-white text-xs sm:text-sm font-medium text-left flex items-center justify-between transition">
+                                <div>
+                                    <span class="block font-semibold">✨ Cheerful Bestie</span>
+                                    <span class="block text-[11px] text-slate-300">Warm & upbeat</span>
+                                </div>
+                                <i class="fa-solid fa-circle-check text-pink-400 text-xs"></i>
+                            </button>
+
+                            <button type="button" data-voice="hype" onclick="selectVoicePersona('hype')" class="voice-btn px-3.5 py-2.5 rounded-xl border border-white/10 bg-slate-900/50 hover:bg-white/10 text-slate-300 text-xs sm:text-sm font-medium text-left flex items-center justify-between transition">
+                                <div>
+                                    <span class="block font-semibold">🎉 Hype Announcer</span>
+                                    <span class="block text-[11px] text-slate-400">High energy party</span>
+                                </div>
+                                <i class="fa-regular fa-circle text-slate-500 text-xs"></i>
+                            </button>
+
+                            <button type="button" data-voice="sweet" onclick="selectVoicePersona('sweet')" class="voice-btn px-3.5 py-2.5 rounded-xl border border-white/10 bg-slate-900/50 hover:bg-white/10 text-slate-300 text-xs sm:text-sm font-medium text-left flex items-center justify-between transition">
+                                <div>
+                                    <span class="block font-semibold">💖 Sweet & Heartfelt</span>
+                                    <span class="block text-[11px] text-slate-400">Gentle & sincere</span>
+                                </div>
+                                <i class="fa-regular fa-circle text-slate-500 text-xs"></i>
+                            </button>
+
+                            <button type="button" data-voice="desi" onclick="selectVoicePersona('desi')" class="voice-btn px-3.5 py-2.5 rounded-xl border border-white/10 bg-slate-900/50 hover:bg-white/10 text-slate-300 text-xs sm:text-sm font-medium text-left flex items-center justify-between transition">
+                                <div>
+                                    <span class="block font-semibold">🇮🇳 Desi Vibe</span>
+                                    <span class="block text-[11px] text-slate-400">Indian English voice</span>
+                                </div>
+                                <i class="fa-regular fa-circle text-slate-500 text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+
                     <!-- Visual Theme Selector -->
                     <div>
                         <label class="block text-sm font-semibold text-slate-200 mb-2">
@@ -545,11 +619,11 @@
                         </li>
                         <li class="flex items-center gap-2">
                             <i class="fa-solid fa-check text-emerald-400"></i>
-                            <span><strong>Stage 2:</strong> Full-screen confetti explosion, floating balloons & birthday melody</span>
+                            <span><strong>Stage 2:</strong> <strong>AI Voice Greeting</strong> speaks their name & reads your wish aloud with confetti & music!</span>
                         </li>
                         <li class="flex items-center gap-2">
                             <i class="fa-solid fa-check text-emerald-400"></i>
-                            <span><strong>Stage 3:</strong> Interactive birthday cake with flickering candles they can blow out!</span>
+                            <span><strong>Stage 3:</strong> Interactive birthday cake with candles they can blow out for a special voice cheer!</span>
                         </li>
                     </ul>
                 </div>
@@ -661,6 +735,29 @@
                 <h1 id="revealFriendName" class="font-display text-4xl sm:text-6xl font-bold theme-text-gradient tracking-tight leading-tight py-1 mb-4 break-words">
                     Alex!
                 </h1>
+
+                <!-- AI Voice Live Equalizer Status & Replay Bar -->
+                <div class="flex flex-wrap items-center justify-center gap-2.5 mb-4">
+                    <div id="voiceStatusPill" class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-pink-500/15 border border-pink-500/35 text-pink-300 text-xs sm:text-sm font-medium transition">
+                        <div class="flex items-end gap-0.5 h-4 text-pink-400">
+                            <span class="eq-bar"></span>
+                            <span class="eq-bar"></span>
+                            <span class="eq-bar"></span>
+                            <span class="eq-bar"></span>
+                        </div>
+                        <span id="voiceStatusText">AI Voice Ready</span>
+                    </div>
+
+                    <button
+                        type="button"
+                        onclick="speakMainGreeting()"
+                        class="px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white text-xs sm:text-sm font-medium flex items-center gap-1.5 transition cursor-pointer"
+                        title="Replay Spoken AI Greeting"
+                    >
+                        <i class="fa-solid fa-rotate-right text-cyan-300"></i>
+                        <span>Replay Voice Wish</span>
+                    </button>
+                </div>
 
                 <!-- Personalized Typewriter / Fade Message Box -->
                 <div class="max-w-xl mx-auto p-5 sm:p-6 rounded-2xl bg-slate-950/55 border border-white/10 mb-8 shadow-inner">
@@ -919,15 +1016,53 @@
             "So proud of everything you've accomplished! Here's to celebrating your special moment and cheering you on for all the amazing things still to come! 🏆💖"
         ];
 
+        const VOICE_PERSONAS = {
+            bestie: {
+                label: "Cheerful Bestie",
+                geminiVoice: "Leda",
+                stylePrompt: "Say warmly, cheerfully, and excitedly like a close best friend:",
+                langPref: ["en-US", "en-GB"],
+                pitch: 1.08,
+                rate: 1.02
+            },
+            hype: {
+                label: "Hype Announcer",
+                geminiVoice: "Puck",
+                stylePrompt: "Say with high energy, party excitement, and celebration:",
+                langPref: ["en-US", "en-AU", "en-GB"],
+                pitch: 1.15,
+                rate: 1.08
+            },
+            sweet: {
+                label: "Sweet & Heartfelt",
+                geminiVoice: "Aoede",
+                stylePrompt: "Say in a warm, gentle, heartfelt, and sincere tone:",
+                langPref: ["en-GB", "en-US"],
+                pitch: 0.98,
+                rate: 0.94
+            },
+            desi: {
+                label: "Desi Vibe",
+                geminiVoice: "Kore",
+                stylePrompt: "Say warmly and joyfully with an expressive celebratory tone:",
+                langPref: ["en-IN", "hi-IN", "en-GB", "en-US"],
+                pitch: 1.05,
+                rate: 1.0
+            }
+        };
+
         let appState = {
             name: "Alex",
             occasion: "Happy Birthday 🎂",
             message: WISH_TEMPLATES[0],
             theme: "neon",
+            voicePersona: "bestie",
             secretMode: true,
             wishTemplateIndex: 0,
             candlesLit: [true, true, true, true, true],
             soundEnabled: true,
+            isSpeaking: false,
+            activeAudioElement: null,
             audioCtx: null,
             melodyInterval: null,
             micStream: null,
@@ -1000,7 +1135,8 @@
                     n: appState.name,
                     o: appState.occasion,
                     m: appState.message,
-                    t: appState.theme
+                    t: appState.theme,
+                    v: appState.voicePersona
                 };
                 const encoded = encodePayloadBase64(payload);
                 finalUrl = `${baseUrl}?s=${encoded}`;
@@ -1011,6 +1147,7 @@
                 params.set('occ', appState.occasion);
                 if (rawMsg) params.set('msg', rawMsg);
                 params.set('theme', appState.theme);
+                params.set('voice', appState.voicePersona);
                 finalUrl = `${baseUrl}?${params.toString()}`;
                 urlFormatLabel.innerHTML = `<i class="fa-solid fa-link text-cyan-400 mr-1"></i>Standard Readable Link`;
             }
@@ -1030,7 +1167,9 @@
                     appState.occasion = decoded.o || "Happy Birthday 🎂";
                     appState.message = decoded.m || WISH_TEMPLATES[0];
                     appState.theme = decoded.t || "neon";
+                    appState.voicePersona = decoded.v || "bestie";
                     applyTheme(appState.theme);
+                    selectVoicePersona(appState.voicePersona, false);
                     enterSurpriseTeaserMode();
                     return;
                 }
@@ -1039,7 +1178,9 @@
                 appState.occasion = params.get('occ') || "Happy Birthday 🎂";
                 appState.message = params.get('msg') || WISH_TEMPLATES[0];
                 appState.theme = params.get('theme') || "neon";
+                appState.voicePersona = params.get('voice') || "bestie";
                 applyTheme(appState.theme);
+                selectVoicePersona(appState.voicePersona, false);
                 enterSurpriseTeaserMode();
                 return;
             }
@@ -1056,6 +1197,37 @@
         function fillSampleName(sampleName) {
             document.getElementById('friendNameInput').value = sampleName;
             updateGeneratedLink();
+        }
+
+        function selectVoicePersona(personaKey, shouldUpdateUrl = true) {
+            if (!VOICE_PERSONAS[personaKey]) personaKey = 'bestie';
+            appState.voicePersona = personaKey;
+
+            document.querySelectorAll('.voice-btn').forEach(btn => {
+                const isMatch = btn.getAttribute('data-voice') === personaKey;
+                const icon = btn.querySelector('i');
+                if (isMatch) {
+                    btn.classList.add('active-voice', 'border-pink-500', 'bg-pink-500/20', 'text-white');
+                    btn.classList.remove('border-white/10', 'bg-slate-900/50', 'text-slate-300');
+                    if (icon) icon.className = 'fa-solid fa-circle-check text-pink-400 text-xs';
+                } else {
+                    btn.classList.remove('active-voice', 'border-pink-500', 'bg-pink-500/20', 'text-white');
+                    btn.classList.add('border-white/10', 'bg-slate-900/50', 'text-slate-300');
+                    if (icon) icon.className = 'fa-regular fa-circle text-slate-500 text-xs';
+                }
+            });
+
+            if (shouldUpdateUrl) updateGeneratedLink();
+        }
+
+        function testCreatorVoice() {
+            if (appState.isSpeaking) {
+                stopAllVoiceSpeech();
+                return;
+            }
+            updateGeneratedLink();
+            const speechScript = buildGreetingSpeechScript(appState.name, appState.occasion, appState.message);
+            speakTextWithAI(speechScript);
         }
 
         function selectOccasion(btnEl) {
@@ -1186,6 +1358,7 @@
 
         function enterSurpriseTeaserMode() {
             stopMelody();
+            stopAllVoiceSpeech();
             stopMicBlowDetection();
             clearBalloons();
 
@@ -1216,8 +1389,9 @@
             if (giftBox.classList.contains('gift-opening')) return;
             giftBox.classList.add('gift-opening');
 
-            // Initialize Web Audio API on user gesture
+            // Initialize Web Audio API & unlock SpeechSynthesis on user gesture
             initAudioEngine();
+            unlockWebSpeechOnGesture();
             playUnwrapFanfare();
 
             // Burst initial confetti from center
@@ -1246,15 +1420,21 @@
                     burstConfetti(window.innerWidth * 0.8, window.innerHeight * 0.6, 65);
                 }, 300);
 
-                // Start Happy Birthday / Celebration synthesized melody
+                // Speak the personalized AI Voice Greeting aloud!
+                setTimeout(() => {
+                    speakMainGreeting();
+                }, 400);
+
+                // Start Happy Birthday / Celebration synthesized melody (automatically ducked while voice speaks)
                 setTimeout(() => {
                     startCelebrationMelody();
-                }, 700);
+                }, 850);
             }, 520);
         }
 
         function switchToCreatorMode() {
             stopMelody();
+            stopAllVoiceSpeech();
             stopMicBlowDetection();
             clearBalloons();
 
@@ -1342,6 +1522,12 @@
             // Extra fireworks confetti burst & wish chime
             triggerMegaCelebration();
             playWishMadeChime();
+
+            // Trigger AI Voice Cheer for blowing out the candles!
+            if (appState.soundEnabled) {
+                const cheerScript = `Woohoo! Amazing job ${appState.name}! May all your biggest wishes come true!`;
+                speakTextWithAI(cheerScript);
+            }
         }
 
         function relightAllCandles(playEffect = true) {
@@ -1454,10 +1640,281 @@
                 label.textContent = 'Sound On';
                 initAudioEngine();
                 startCelebrationMelody();
+                speakMainGreeting();
             } else {
                 icon.className = 'fa-solid fa-volume-xmark text-slate-400';
                 label.textContent = 'Muted';
                 stopMelody();
+                stopAllVoiceSpeech();
+            }
+        }
+
+        /* ----------------------------------------------------
+         * 7B. DUAL-ENGINE AI VOICE GREETING SYSTEM
+         *     (Gemini 2.5 TTS + Web Speech Neural Fallback)
+         * ---------------------------------------------------- */
+        let cachedBrowserVoices = [];
+        if ('speechSynthesis' in window) {
+            const loadVoices = () => {
+                cachedBrowserVoices = window.speechSynthesis.getVoices();
+            };
+            loadVoices();
+            window.speechSynthesis.onvoiceschanged = loadVoices;
+        }
+
+        function unlockWebSpeechOnGesture() {
+            if ('speechSynthesis' in window) {
+                try {
+                    window.speechSynthesis.cancel();
+                    const silentUtterance = new SpeechSynthesisUtterance('');
+                    silentUtterance.volume = 0;
+                    window.speechSynthesis.speak(silentUtterance);
+                } catch (e) {}
+            }
+        }
+
+        function stripEmojisForSpeech(str) {
+            if (!str) return "";
+            return str
+                .replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE00}-\u{FE0F}\u{1F900}-\u{1F9FF}]/gu, '')
+                .replace(/\s+/g, ' ')
+                .trim();
+        }
+
+        function buildGreetingSpeechScript(name, occasion, message) {
+            const cleanOcc = stripEmojisForSpeech(occasion) || "Happy Birthday";
+            const cleanName = stripEmojisForSpeech(name) || "my friend";
+            const cleanMsg = stripEmojisForSpeech(message);
+            return `Surprise! ${cleanOcc}, ${cleanName}! ${cleanMsg} Now make a wish and blow out the candles on your cake!`;
+        }
+
+        function speakMainGreeting() {
+            if (!appState.soundEnabled) {
+                appState.soundEnabled = true;
+                const icon = document.getElementById('audioIcon');
+                const label = document.getElementById('audioLabel');
+                if (icon) icon.className = 'fa-solid fa-volume-high text-pink-400';
+                if (label) label.textContent = 'Sound On';
+            }
+            const script = buildGreetingSpeechScript(appState.name, appState.occasion, appState.message);
+            speakTextWithAI(script);
+        }
+
+        function setVoiceSpeakingUI(isSpeaking, statusLabel = "") {
+            appState.isSpeaking = isSpeaking;
+            const pill = document.getElementById('voiceStatusPill');
+            const statusText = document.getElementById('voiceStatusText');
+            const testBtnIcon = document.getElementById('testVoiceIcon');
+            const testBtnLabel = document.getElementById('testVoiceLabel');
+
+            if (isSpeaking) {
+                if (pill) pill.classList.add('speaking-active');
+                if (statusText) statusText.textContent = statusLabel || `Wishing ${appState.name}...`;
+                if (testBtnIcon) testBtnIcon.className = 'fa-solid fa-stop text-rose-400';
+                if (testBtnLabel) testBtnLabel.textContent = 'Stop Voice';
+            } else {
+                if (pill) pill.classList.remove('speaking-active');
+                if (statusText) statusText.textContent = `AI Voice (${VOICE_PERSONAS[appState.voicePersona]?.label || 'Cheerful'})`;
+                if (testBtnIcon) testBtnIcon.className = 'fa-solid fa-volume-high';
+                if (testBtnLabel) testBtnLabel.textContent = 'Test AI Voice';
+            }
+        }
+
+        function stopAllVoiceSpeech() {
+            if ('speechSynthesis' in window) {
+                try {
+                    window.speechSynthesis.cancel();
+                } catch (e) {}
+            }
+            if (appState.activeAudioElement) {
+                try {
+                    appState.activeAudioElement.pause();
+                    appState.activeAudioElement.currentTime = 0;
+                } catch (e) {}
+                appState.activeAudioElement = null;
+            }
+            setVoiceSpeakingUI(false);
+        }
+
+        async function speakTextWithAI(textToSpeak) {
+            stopAllVoiceSpeech();
+            const persona = VOICE_PERSONAS[appState.voicePersona] || VOICE_PERSONAS.bestie;
+            setVoiceSpeakingUI(true, `🎙️ Wishing ${appState.name}...`);
+
+            // 1. Try Gemini 2.5 Flash Preview TTS if an environment API key is configured
+            const apiKey = ""; // Leave as-is; Canvas injects if available, or falls back on static GitHub Pages
+            if (apiKey && apiKey.trim() !== "") {
+                try {
+                    const audioUrl = await fetchGeminiTTSAudio(textToSpeak, persona);
+                    if (audioUrl) {
+                        const audio = new Audio(audioUrl);
+                        appState.activeAudioElement = audio;
+                        audio.onended = () => setVoiceSpeakingUI(false);
+                        audio.onerror = () => speakWithWebSpeechFallback(textToSpeak, persona);
+                        await audio.play();
+                        return;
+                    }
+                } catch (err) {
+                    // Fallback seamlessly to Web Speech API
+                }
+            }
+
+            // 2. Seamless Web Speech API Neural/Natural Synthesizer (Works 100% free on GitHub Pages)
+            speakWithWebSpeechFallback(textToSpeak, persona);
+        }
+
+        async function fetchGeminiTTSAudio(textToSpeak, persona) {
+            const apiKey = "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
+            const payload = {
+                contents: [{
+                    parts: [{ text: `${persona.stylePrompt} ${textToSpeak}` }]
+                }],
+                generationConfig: {
+                    responseModalities: ["AUDIO"],
+                    speechConfig: {
+                        voiceConfig: {
+                            prebuiltVoiceConfig: { voiceName: persona.geminiVoice || "Leda" }
+                        }
+                    }
+                },
+                model: "gemini-2.5-flash-preview-tts"
+            };
+
+            let delay = 1000;
+            for (let attempt = 0; attempt < 3; attempt++) {
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    if (!response.ok) throw new Error("TTS HTTP error");
+                    const result = await response.json();
+                    const part = result?.candidates?.[0]?.content?.parts?.[0];
+                    const audioData = part?.inlineData?.data;
+                    const mimeType = part?.inlineData?.mimeType;
+
+                    if (audioData && mimeType && mimeType.startsWith("audio/")) {
+                        const rateMatch = mimeType.match(/rate=(\d+)/);
+                        const sampleRate = rateMatch ? parseInt(rateMatch[1], 10) : 24000;
+                        const pcmBuffer = base64ToArrayBuffer(audioData);
+                        const pcm16 = new Int16Array(pcmBuffer);
+                        const wavBlob = pcm16ToWavBlob(pcm16, sampleRate);
+                        return URL.createObjectURL(wavBlob);
+                    }
+                    break;
+                } catch (e) {
+                    if (attempt === 2) throw e;
+                    await new Promise(r => setTimeout(r, delay));
+                    delay *= 2;
+                }
+            }
+            return null;
+        }
+
+        function base64ToArrayBuffer(base64) {
+            const binaryString = atob(base64);
+            const len = binaryString.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+            return bytes.buffer;
+        }
+
+        function pcm16ToWavBlob(pcm16, sampleRate) {
+            const buffer = new ArrayBuffer(44 + pcm16.length * 2);
+            const view = new DataView(buffer);
+            const writeStr = (offset, str) => {
+                for (let i = 0; i < str.length; i++) {
+                    view.setUint8(offset + i, str.charCodeAt(i));
+                }
+            };
+            writeStr(0, 'RIFF');
+            view.setUint32(4, 36 + pcm16.length * 2, true);
+            writeStr(8, 'WAVE');
+            writeStr(12, 'fmt ');
+            view.setUint32(16, 16, true);
+            view.setUint16(20, 1, true);
+            view.setUint16(22, 1, true);
+            view.setUint32(24, sampleRate, true);
+            view.setUint32(28, sampleRate * 2, true);
+            view.setUint16(32, 2, true);
+            view.setUint16(34, 16, true);
+            writeStr(36, 'data');
+            view.setUint32(40, pcm16.length * 2, true);
+            for (let i = 0; i < pcm16.length; i++) {
+                view.setInt16(44 + i * 2, pcm16[i], true);
+            }
+            return new Blob([buffer], { type: 'audio/wav' });
+        }
+
+        function pickBestBrowserVoice(persona) {
+            if (!('speechSynthesis' in window)) return null;
+            const voices = cachedBrowserVoices.length > 0
+                ? cachedBrowserVoices
+                : window.speechSynthesis.getVoices();
+            if (!voices || voices.length === 0) return null;
+
+            // Score voices based on persona language preferences & natural/neural quality
+            let bestVoice = null;
+            let bestScore = -1;
+
+            voices.forEach(voice => {
+                let score = 0;
+                const vLang = (voice.lang || '').toLowerCase();
+                const vName = (voice.name || '').toLowerCase();
+
+                // Language match
+                const langIndex = persona.langPref.findIndex(lp => vLang.startsWith(lp.toLowerCase()));
+                if (langIndex === 0) score += 50;
+                else if (langIndex > 0) score += 30;
+                else if (vLang.startsWith('en')) score += 15;
+
+                // Prioritize high-quality Natural / Neural / Google / Siri voices
+                if (vName.includes('natural') || vName.includes('online')) score += 35;
+                if (vName.includes('google')) score += 28;
+                if (vName.includes('aria') || vName.includes('jenny') || vName.includes('neerja') || vName.includes('samantha') || vName.includes('siri')) score += 25;
+                if (vName.includes('female') || vName.includes('zira') || vName.includes('veena') || vName.includes('karen')) score += 12;
+
+                if (score > bestScore) {
+                    bestScore = score;
+                    bestVoice = voice;
+                }
+            });
+
+            return bestVoice || voices[0];
+        }
+
+        function speakWithWebSpeechFallback(textToSpeak, persona) {
+            if (!('speechSynthesis' in window)) {
+                setVoiceSpeakingUI(false);
+                return;
+            }
+
+            try {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(textToSpeak);
+                const selectedVoice = pickBestBrowserVoice(persona);
+                if (selectedVoice) {
+                    utterance.voice = selectedVoice;
+                    utterance.lang = selectedVoice.lang;
+                } else {
+                    utterance.lang = persona.langPref[0] || 'en-US';
+                }
+
+                utterance.pitch = persona.pitch || 1.05;
+                utterance.rate = persona.rate || 1.0;
+                utterance.volume = 1.0;
+
+                utterance.onstart = () => setVoiceSpeakingUI(true, `🎙️ Wishing ${appState.name}...`);
+                utterance.onend = () => setVoiceSpeakingUI(false);
+                utterance.onerror = () => setVoiceSpeakingUI(false);
+
+                window.speechSynthesis.speak(utterance);
+            } catch (e) {
+                setVoiceSpeakingUI(false);
             }
         }
 
@@ -1527,9 +1984,13 @@
                     return;
                 }
                 const note = melody[noteIdx];
-                playSynthNote(note.f, note.d * 0.9, 0, 'triangle', 0.12);
+                // Audio Ducking: lower melody volume smoothly while AI voice is speaking
+                const mainVol = appState.isSpeaking ? 0.025 : 0.12;
+                const harmVol = appState.isSpeaking ? 0.008 : 0.04;
+
+                playSynthNote(note.f, note.d * 0.9, 0, 'triangle', mainVol);
                 // Subtle warm harmonic octave
-                playSynthNote(note.f * 2, note.d * 0.6, 0, 'sine', 0.04);
+                playSynthNote(note.f * 2, note.d * 0.6, 0, 'sine', harmVol);
 
                 noteIdx = (noteIdx + 1) % melody.length;
                 appState.melodyInterval = setTimeout(playNext, note.d * 1000);
