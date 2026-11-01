@@ -412,32 +412,34 @@
                         <div class="flex justify-between items-center mb-1.5">
                             <label for="customMsgInput" class="block text-sm font-semibold text-slate-200">
                                 Personal Wish Message
+                                <span id="presetBadge" class="ml-1.5 text-[11px] px-2 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 font-medium">Preset #1 (Tiny URL)</span>
                             </label>
                             <button
                                 type="button"
                                 onclick="cycleWishTemplate()"
-                                class="text-xs text-pink-400 hover:text-pink-300 font-medium flex items-center gap-1 transition"
+                                class="text-xs text-pink-400 hover:text-pink-300 font-medium flex items-center gap-1 transition cursor-pointer"
                             >
                                 <i class="fa-solid fa-dice"></i>
-                                <span>Inspire Me</span>
+                                <span>Next Preset Wish</span>
                             </button>
                         </div>
                         <textarea
                             id="customMsgInput"
                             rows="3"
                             maxlength="320"
-                            placeholder="Write a heartfelt or funny note... (Leave blank to use a magical default birthday wish!)"
+                            placeholder="Write a heartfelt or funny note... (Using a preset keeps your link ultra-short!)"
                             class="w-full p-3.5 rounded-xl bg-slate-900/75 border border-white/15 focus:border-pink-500 focus:ring-2 focus:ring-pink-500/30 text-white placeholder-slate-500 text-sm outline-none transition resize-none"
-                            oninput="updateGeneratedLink()"
+                            oninput="onCustomMessageInput()"
                         ></textarea>
                     </div>
 
-                    <!-- AI Voice Persona Selector & Live Voice Preview -->
+                    <!-- Real Gemini Neural Voice Selector & Live Preview -->
                     <div>
                         <div class="flex justify-between items-center mb-2">
                             <label class="block text-sm font-semibold text-slate-200 flex items-center gap-1.5">
-                                <i class="fa-solid fa-microphone-lines text-pink-400"></i>
-                                <span>AI Voice Greeting Style</span>
+                                <i class="fa-solid fa-wand-magic-sparkles text-pink-400"></i>
+                                <span>Gemini AI Voice Persona</span>
+                                <span id="voiceEngineBadge" class="text-[10px] px-2 py-0.5 rounded-full bg-purple-500/20 border border-purple-400/30 text-purple-200 font-medium">Gemini 2.5 TTS</span>
                             </label>
                             <button
                                 type="button"
@@ -446,41 +448,86 @@
                                 class="px-3 py-1 rounded-lg bg-pink-500/20 hover:bg-pink-500/30 border border-pink-500/40 text-pink-300 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
                             >
                                 <i id="testVoiceIcon" class="fa-solid fa-volume-high"></i>
-                                <span id="testVoiceLabel">Test AI Voice</span>
+                                <span id="testVoiceLabel">Test Gemini Voice</span>
                             </button>
                         </div>
-                        <div class="grid grid-cols-2 gap-2.5" id="voicePersonaGrid">
-                            <button type="button" data-voice="bestie" onclick="selectVoicePersona('bestie')" class="voice-btn active-voice px-3.5 py-2.5 rounded-xl border border-pink-500 bg-pink-500/20 text-white text-xs sm:text-sm font-medium text-left flex items-center justify-between transition">
+
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2" id="voicePersonaGrid">
+                            <button type="button" data-voice="Kore" onclick="selectVoicePersona('Kore')" class="voice-btn active-voice px-3 py-2.5 rounded-xl border border-pink-500 bg-pink-500/20 text-white text-xs font-medium text-left flex items-center justify-between transition">
                                 <div>
-                                    <span class="block font-semibold">✨ Cheerful Bestie</span>
-                                    <span class="block text-[11px] text-slate-300">Warm & upbeat</span>
+                                    <span class="block font-semibold">✨ Kore (Gemini)</span>
+                                    <span class="block text-[10px] text-slate-300">Warm & Natural</span>
                                 </div>
                                 <i class="fa-solid fa-circle-check text-pink-400 text-xs"></i>
                             </button>
 
-                            <button type="button" data-voice="hype" onclick="selectVoicePersona('hype')" class="voice-btn px-3.5 py-2.5 rounded-xl border border-white/10 bg-slate-900/50 hover:bg-white/10 text-slate-300 text-xs sm:text-sm font-medium text-left flex items-center justify-between transition">
+                            <button type="button" data-voice="Puck" onclick="selectVoicePersona('Puck')" class="voice-btn px-3 py-2.5 rounded-xl border border-white/10 bg-slate-900/50 hover:bg-white/10 text-slate-300 text-xs font-medium text-left flex items-center justify-between transition">
                                 <div>
-                                    <span class="block font-semibold">🎉 Hype Announcer</span>
-                                    <span class="block text-[11px] text-slate-400">High energy party</span>
+                                    <span class="block font-semibold">🎉 Puck</span>
+                                    <span class="block text-[10px] text-slate-400">Upbeat & Playful</span>
                                 </div>
                                 <i class="fa-regular fa-circle text-slate-500 text-xs"></i>
                             </button>
 
-                            <button type="button" data-voice="sweet" onclick="selectVoicePersona('sweet')" class="voice-btn px-3.5 py-2.5 rounded-xl border border-white/10 bg-slate-900/50 hover:bg-white/10 text-slate-300 text-xs sm:text-sm font-medium text-left flex items-center justify-between transition">
+                            <button type="button" data-voice="Aoede" onclick="selectVoicePersona('Aoede')" class="voice-btn px-3 py-2.5 rounded-xl border border-white/10 bg-slate-900/50 hover:bg-white/10 text-slate-300 text-xs font-medium text-left flex items-center justify-between transition">
                                 <div>
-                                    <span class="block font-semibold">💖 Sweet & Heartfelt</span>
-                                    <span class="block text-[11px] text-slate-400">Gentle & sincere</span>
+                                    <span class="block font-semibold">🌸 Aoede</span>
+                                    <span class="block text-[10px] text-slate-400">Breezy & Expressive</span>
                                 </div>
                                 <i class="fa-regular fa-circle text-slate-500 text-xs"></i>
                             </button>
 
-                            <button type="button" data-voice="desi" onclick="selectVoicePersona('desi')" class="voice-btn px-3.5 py-2.5 rounded-xl border border-white/10 bg-slate-900/50 hover:bg-white/10 text-slate-300 text-xs sm:text-sm font-medium text-left flex items-center justify-between transition">
+                            <button type="button" data-voice="Fenrir" onclick="selectVoicePersona('Fenrir')" class="voice-btn px-3 py-2.5 rounded-xl border border-white/10 bg-slate-900/50 hover:bg-white/10 text-slate-300 text-xs font-medium text-left flex items-center justify-between transition">
                                 <div>
-                                    <span class="block font-semibold">🇮🇳 Desi Vibe</span>
-                                    <span class="block text-[11px] text-slate-400">Indian English voice</span>
+                                    <span class="block font-semibold">🔥 Fenrir</span>
+                                    <span class="block text-[10px] text-slate-400">Excitable Party Hype</span>
                                 </div>
                                 <i class="fa-regular fa-circle text-slate-500 text-xs"></i>
                             </button>
+
+                            <button type="button" data-voice="Zephyr" onclick="selectVoicePersona('Zephyr')" class="voice-btn px-3 py-2.5 rounded-xl border border-white/10 bg-slate-900/50 hover:bg-white/10 text-slate-300 text-xs font-medium text-left flex items-center justify-between transition">
+                                <div>
+                                    <span class="block font-semibold">💖 Zephyr</span>
+                                    <span class="block text-[10px] text-slate-400">Sweet & Gentle</span>
+                                </div>
+                                <i class="fa-regular fa-circle text-slate-500 text-xs"></i>
+                            </button>
+
+                            <button type="button" onclick="toggleGeminiKeyBox()" class="px-3 py-2.5 rounded-xl border border-cyan-500/30 bg-cyan-950/30 hover:bg-cyan-900/40 text-cyan-200 text-xs font-medium text-left flex items-center justify-between transition">
+                                <div>
+                                    <span class="block font-semibold">🔑 GitHub Key</span>
+                                    <span id="keyStatusSubtext" class="block text-[10px] text-cyan-400">Setup for GitHub</span>
+                                </div>
+                                <i class="fa-solid fa-sliders text-cyan-400 text-xs"></i>
+                            </button>
+                        </div>
+
+                        <!-- Collapsible Gemini API Key Box for Static GitHub Pages Hosting -->
+                        <div id="geminiKeyBox" class="mt-2.5 p-3.5 rounded-xl bg-slate-950/85 border border-cyan-500/30 text-xs space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="font-semibold text-cyan-300 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-key"></i>
+                                    <span>Enable Real Gemini Voice on GitHub Pages</span>
+                                </span>
+                                <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer" class="text-[11px] text-pink-400 hover:underline font-medium">
+                                    Get Free Key ↗
+                                </a>
+                            </div>
+                            <p class="text-[11px] text-slate-300 leading-relaxed">
+                                In this preview, Gemini's voice works automatically. On <strong>github.io</strong>, paste a free Gemini API key below so your friends hear my real neural voice instead of their browser's robotic voice:
+                            </p>
+                            <div class="flex gap-2">
+                                <input
+                                    type="password"
+                                    id="userGeminiKeyInput"
+                                    placeholder="Paste AIzaSy... key (saved in browser & encrypted in link)"
+                                    class="flex-1 px-3 py-2 rounded-lg bg-slate-900 border border-white/15 text-white font-mono text-xs outline-none focus:border-cyan-400"
+                                    oninput="saveUserGeminiKey()"
+                                >
+                                <button type="button" onclick="clearUserGeminiKey()" class="px-3 py-2 rounded-lg bg-white/10 hover:bg-white/15 text-slate-300 text-xs">
+                                    Clear
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -528,10 +575,10 @@
                                 </div>
                                 <div>
                                     <span class="block text-sm font-semibold text-white">Secret Spoiler-Free Link</span>
-                                    <span class="block text-xs text-slate-400">Encodes the name & message so the URL doesn't spoil the surprise</span>
+                                    <span class="block text-xs text-slate-400">Hides the name in a micro-code (or uncheck for `?n=Name`)</span>
                                 </div>
                             </div>
-                            <input type="checkbox" id="secretModeToggle" checked onchange="updateGeneratedLink()" class="w-5 h-5 accent-pink-500 rounded cursor-pointer">
+                            <input type="checkbox" id="secretModeToggle" onchange="updateGeneratedLink()" class="w-5 h-5 accent-pink-500 rounded cursor-pointer">
                         </label>
                     </div>
                 </div>
@@ -545,15 +592,20 @@
                         <i class="fa-solid fa-share-nodes text-cyan-400"></i>
                         <span>2. Share Surprise Link</span>
                     </h2>
-                    <p class="text-xs text-slate-300 mb-4">
-                        Copy this custom link and send it via WhatsApp, Instagram, iMessage, or Discord:
-                    </p>
+                    <div class="flex items-center justify-between mb-3">
+                        <p class="text-xs text-slate-300">
+                            Compact link + 1-click <code class="text-cyan-300">is.gd</code> shortener:
+                        </p>
+                        <span id="charCountPill" class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 font-semibold">
+                            Ultra-Short
+                        </span>
+                    </div>
 
                     <!-- Generated URL Box -->
                     <div class="p-3 rounded-xl bg-slate-950/90 border border-white/15 mb-4">
                         <div class="flex items-center justify-between text-[11px] text-slate-400 mb-1">
-                            <span id="urlFormatLabel"><i class="fa-solid fa-lock text-emerald-400 mr-1"></i>Spoiler-Free Encoded Link</span>
-                            <span class="text-pink-400 font-medium">Ready to share</span>
+                            <span id="urlFormatLabel"><i class="fa-solid fa-bolt text-emerald-400 mr-1"></i>Micro-Parameter Link</span>
+                            <span id="shortStatusTag" class="text-cyan-400 font-medium">Ready to share</span>
                         </div>
                         <input
                             type="text"
@@ -575,14 +627,27 @@
                             <span id="copyBtnText">Copy Surprise Link</span>
                         </button>
 
-                        <button
-                            type="button"
-                            onclick="launchPreviewFromCreator()"
-                            class="w-full py-3.5 px-5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 text-white font-display font-semibold text-base flex items-center justify-center gap-2 transition cursor-pointer"
-                        >
-                            <i class="fa-solid fa-play text-pink-400"></i>
-                            <span>Test / Preview Surprise Now</span>
-                        </button>
+                        <div class="grid grid-cols-2 gap-2.5">
+                            <button
+                                type="button"
+                                onclick="shortenWithIsGd()"
+                                id="shortenerBtn"
+                                class="py-3 px-3 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-200 font-display font-semibold text-xs sm:text-sm flex items-center justify-center gap-1.5 transition cursor-pointer"
+                                title="Instant 18-character short URL via is.gd / v.gd"
+                            >
+                                <i id="shortenerIcon" class="fa-solid fa-compress"></i>
+                                <span id="shortenerBtnText">⚡ Shorten (is.gd)</span>
+                            </button>
+
+                            <button
+                                type="button"
+                                onclick="launchPreviewFromCreator()"
+                                class="py-3 px-3 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 text-white font-display font-semibold text-xs sm:text-sm flex items-center justify-center gap-1.5 transition cursor-pointer"
+                            >
+                                <i class="fa-solid fa-play text-pink-400"></i>
+                                <span>Test Surprise</span>
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Native Web Share / Social Quick Share -->
@@ -619,11 +684,11 @@
                         </li>
                         <li class="flex items-center gap-2">
                             <i class="fa-solid fa-check text-emerald-400"></i>
-                            <span><strong>Stage 2:</strong> <strong>AI Voice Greeting</strong> speaks their name & reads your wish aloud with confetti & music!</span>
+                            <span><strong>Stage 2:</strong> <strong>Real Gemini Neural Voice</strong> speaks their name & reads your wish aloud!</span>
                         </li>
                         <li class="flex items-center gap-2">
                             <i class="fa-solid fa-check text-emerald-400"></i>
-                            <span><strong>Stage 3:</strong> Interactive birthday cake with candles they can blow out for a special voice cheer!</span>
+                            <span><strong>Stage 3:</strong> Interactive birthday cake with candles they can blow out for a voice cheer!</span>
                         </li>
                     </ul>
                 </div>
@@ -1006,63 +1071,87 @@
     <!-- ========================================== -->
     <script>
         /* ----------------------------------------------------
-         * 1. APPLICATION STATE & PRESET WISH TEMPLATES
+         * 1. PRESET TEMPLATES & GEMINI VOICE DEFINITIONS
          * ---------------------------------------------------- */
         const WISH_TEMPLATES = [
             "Wishing you a day filled with laughter, unforgettable memories, and all the cake your heart desires! May this next chapter bring you endless joy and success! ✨🎂",
             "Another year wiser, brighter, and more awesome! Thank you for being such an incredible friend. Hope your special day is as legendary as you are! 🚀🎉",
             "May your year ahead be packed with exciting adventures, big wins, and non-stop happiness. Sending you the biggest virtual hug today! 🌟🥳",
             "Cheers to you! Whether you're celebrating big or keeping it cozy, I hope today treats you like absolute royalty. Make a huge wish! 👑🎈",
-            "So proud of everything you've accomplished! Here's to celebrating your special moment and cheering you on for all the amazing things still to come! 🏆💖"
+            "So proud of everything you've accomplished! Here's to celebrating your special moment and cheering you on for all the amazing things still to come! 🏆💖",
+            "Sending you oceans of love, good vibes, and non-stop smiles today! May every single wish you make tonight come true! 🌈🥂"
         ];
 
+        const OCCASION_LIST = [
+            "Happy Birthday 🎂",
+            "Congratulations 🎉",
+            "You Did It! 🏆"
+        ];
+
+        const THEME_LIST = ["neon", "gold", "sunset"];
+
+        const VOICE_LIST = ["Kore", "Puck", "Aoede", "Fenrir", "Zephyr"];
+
         const VOICE_PERSONAS = {
-            bestie: {
-                label: "Cheerful Bestie",
-                geminiVoice: "Leda",
-                stylePrompt: "Say warmly, cheerfully, and excitedly like a close best friend:",
-                langPref: ["en-US", "en-GB"],
-                pitch: 1.08,
-                rate: 1.02
-            },
-            hype: {
-                label: "Hype Announcer",
-                geminiVoice: "Puck",
-                stylePrompt: "Say with high energy, party excitement, and celebration:",
-                langPref: ["en-US", "en-AU", "en-GB"],
-                pitch: 1.15,
-                rate: 1.08
-            },
-            sweet: {
-                label: "Sweet & Heartfelt",
-                geminiVoice: "Aoede",
-                stylePrompt: "Say in a warm, gentle, heartfelt, and sincere tone:",
-                langPref: ["en-GB", "en-US"],
-                pitch: 0.98,
-                rate: 0.94
-            },
-            desi: {
-                label: "Desi Vibe",
+            Kore: {
+                idx: 0,
+                label: "Kore (Gemini Default)",
                 geminiVoice: "Kore",
-                stylePrompt: "Say warmly and joyfully with an expressive celebratory tone:",
-                langPref: ["en-IN", "hi-IN", "en-GB", "en-US"],
-                pitch: 1.05,
+                stylePrompt: "Say warmly, cheerfully, and naturally like a close friend celebrating:",
+                pitch: 1.04,
                 rate: 1.0
+            },
+            Puck: {
+                idx: 1,
+                label: "Puck (Upbeat)",
+                geminiVoice: "Puck",
+                stylePrompt: "Say in an upbeat, playful, and joyful celebratory tone:",
+                pitch: 1.08,
+                rate: 1.03
+            },
+            Aoede: {
+                idx: 2,
+                label: "Aoede (Expressive)",
+                geminiVoice: "Aoede",
+                stylePrompt: "Say in a breezy, warm, and expressive voice:",
+                pitch: 1.02,
+                rate: 0.98
+            },
+            Fenrir: {
+                idx: 3,
+                label: "Fenrir (Party Hype)",
+                geminiVoice: "Fenrir",
+                stylePrompt: "Say with high energy, excitement, and party enthusiasm:",
+                pitch: 1.1,
+                rate: 1.05
+            },
+            Zephyr: {
+                idx: 4,
+                label: "Zephyr (Sweet & Gentle)",
+                geminiVoice: "Zephyr",
+                stylePrompt: "Say in a sweet, gentle, and heartfelt tone:",
+                pitch: 0.98,
+                rate: 0.95
             }
         };
 
         let appState = {
             name: "Alex",
-            occasion: "Happy Birthday 🎂",
+            occasion: OCCASION_LIST[0],
             message: WISH_TEMPLATES[0],
+            presetIndex: 0, // 0..5 if using a preset, -1 if custom message edited
             theme: "neon",
-            voicePersona: "bestie",
-            secretMode: true,
-            wishTemplateIndex: 0,
+            voicePersona: "Kore",
+            secretMode: false,
+            userGeminiKey: "",
+            embeddedKey: "",
+            lastShortenedForUrl: "",
+            lastShortUrl: "",
             candlesLit: [true, true, true, true, true],
             soundEnabled: true,
             isSpeaking: false,
             activeAudioElement: null,
+            ttsCache: {}, // caches generated WAV Blob URLs by script+voice
             audioCtx: null,
             melodyInterval: null,
             micStream: null,
@@ -1072,34 +1161,117 @@
         };
 
         /* ----------------------------------------------------
-         * 2. UTF-8 SAFE BASE64 ENCODING & DECODING
+         * 2. COMPACT ENCODING & KEY OBFUSCATION HELPERS
          * ---------------------------------------------------- */
-        function encodePayloadBase64(obj) {
+        // URL-safe Base64 without padding (=) to keep URLs as short as possible
+        function toBase64Url(str) {
             try {
-                const jsonStr = JSON.stringify(obj);
-                return btoa(encodeURIComponent(jsonStr));
+                const utf8Bytes = new TextEncoder().encode(str);
+                let binary = "";
+                utf8Bytes.forEach(b => binary += String.fromCharCode(b));
+                return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
             } catch (e) {
-                console.error("Encoding error:", e);
                 return "";
             }
         }
 
-        function decodePayloadBase64(encodedStr) {
+        function fromBase64Url(b64u) {
             try {
-                const jsonStr = decodeURIComponent(atob(encodedStr));
-                return JSON.parse(jsonStr);
+                let b64 = b64u.replace(/-/g, '+').replace(/_/g, '/');
+                while (b64.length % 4) b64 += '=';
+                const binary = atob(b64);
+                const bytes = new Uint8Array(binary.length);
+                for (let i = 0; i < binary.length; i++) {
+                    bytes[i] = binary.charCodeAt(i);
+                }
+                return new TextDecoder().decode(bytes);
             } catch (e) {
-                console.error("Decoding error:", e);
-                return null;
+                return "";
+            }
+        }
+
+        // Lightweight XOR + Base64URL obfuscation so a pasted Gemini API key can travel in the URL
+        const OBF_SALT = "SurpriseLink2026";
+        function obfuscateKey(rawKey) {
+            if (!rawKey) return "";
+            let out = "";
+            for (let i = 0; i < rawKey.length; i++) {
+                out += String.fromCharCode(rawKey.charCodeAt(i) ^ OBF_SALT.charCodeAt(i % OBF_SALT.length));
+            }
+            return btoa(out).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+        }
+
+        function deobfuscateKey(encoded) {
+            if (!encoded) return "";
+            try {
+                let b64 = encoded.replace(/-/g, '+').replace(/_/g, '/');
+                while (b64.length % 4) b64 += '=';
+                const raw = atob(b64);
+                let out = "";
+                for (let i = 0; i < raw.length; i++) {
+                    out += String.fromCharCode(raw.charCodeAt(i) ^ OBF_SALT.charCodeAt(i % OBF_SALT.length));
+                }
+                return out;
+            } catch (e) {
+                return "";
+            }
+        }
+
+        function loadSavedGeminiKey() {
+            try {
+                const saved = localStorage.getItem("surprise_gemini_api_key") || "";
+                if (saved) {
+                    appState.userGeminiKey = saved.trim();
+                    const input = document.getElementById("userGeminiKeyInput");
+                    if (input) input.value = appState.userGeminiKey;
+                }
+            } catch (e) {}
+            updateKeyStatusUI();
+        }
+
+        function saveUserGeminiKey() {
+            const input = document.getElementById("userGeminiKeyInput");
+            const val = input ? input.value.trim() : "";
+            appState.userGeminiKey = val;
+            try {
+                if (val) localStorage.setItem("surprise_gemini_api_key", val);
+                else localStorage.removeItem("surprise_gemini_api_key");
+            } catch (e) {}
+            updateKeyStatusUI();
+            updateGeneratedLink();
+        }
+
+        function clearUserGeminiKey() {
+            const input = document.getElementById("userGeminiKeyInput");
+            if (input) input.value = "";
+            saveUserGeminiKey();
+            showToast("Cleared saved Gemini API key");
+        }
+
+        function toggleGeminiKeyBox() {
+            const box = document.getElementById("geminiKeyBox");
+            if (box) box.classList.toggle("hidden");
+        }
+
+        function updateKeyStatusUI() {
+            const sub = document.getElementById("keyStatusSubtext");
+            const badge = document.getElementById("voiceEngineBadge");
+            const hasKey = Boolean(appState.userGeminiKey || appState.embeddedKey);
+            if (sub) {
+                sub.textContent = hasKey ? "✓ Key Active" : "Setup for GitHub";
+                sub.className = hasKey ? "block text-[10px] text-emerald-400 font-semibold" : "block text-[10px] text-cyan-400";
+            }
+            if (badge) {
+                badge.textContent = hasKey ? "Gemini 2.5 Neural ✓" : "Gemini 2.5 TTS";
             }
         }
 
         /* ----------------------------------------------------
-         * 3. URL PARAMETER PARSING & LINK GENERATION
+         * 3. ULTRA-SHORT URL GENERATOR & PARSER
          * ---------------------------------------------------- */
         function getActiveOccasionFromForm() {
             const activeBtn = document.querySelector('.occ-btn.active-occ');
-            if (!activeBtn) return "Happy Birthday 🎂";
+            if (!activeBtn) return OCCASION_LIST[0];
             const occVal = activeBtn.getAttribute('data-occ');
             if (occVal === 'CUSTOM') {
                 const customText = document.getElementById('customOccasionInput').value.trim();
@@ -1108,91 +1280,307 @@
             return occVal;
         }
 
+        function onCustomMessageInput() {
+            const rawMsg = document.getElementById('customMsgInput').value.trim();
+            const matchedIdx = WISH_TEMPLATES.findIndex(t => t.trim() === rawMsg);
+            appState.presetIndex = matchedIdx;
+            updatePresetBadgeUI();
+            updateGeneratedLink();
+        }
+
+        function updatePresetBadgeUI() {
+            const badge = document.getElementById('presetBadge');
+            if (!badge) return;
+            if (appState.presetIndex >= 0) {
+                badge.textContent = `Preset #${appState.presetIndex + 1} (Tiny URL)`;
+                badge.className = "ml-1.5 text-[11px] px-2 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 font-medium";
+            } else {
+                badge.textContent = "Custom Text";
+                badge.className = "ml-1.5 text-[11px] px-2 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-300 font-medium";
+            }
+        }
+
         function updateGeneratedLink() {
             const rawName = document.getElementById('friendNameInput').value.trim();
             const rawMsg = document.getElementById('customMsgInput').value.trim();
             const occ = getActiveOccasionFromForm();
             const isSecret = document.getElementById('secretModeToggle').checked;
 
-            appState.name = rawName || "My Friend";
+            appState.name = rawName || "Alex";
             appState.occasion = occ;
             appState.message = rawMsg || WISH_TEMPLATES[0];
             appState.secretMode = isSecret;
 
-            // Update summary name preview
-            document.getElementById('summaryFriendName').textContent = rawName || "your friend";
+            // Check if message matches one of the 6 presets
+            const matchedPreset = WISH_TEMPLATES.findIndex(t => t.trim() === appState.message.trim());
+            appState.presetIndex = matchedPreset;
+            updatePresetBadgeUI();
 
-            // Construct base URL from current window location (works automatically on GitHub Pages)
+            // Update summary friend name
+            document.getElementById('summaryFriendName').textContent = appState.name;
+
+            // Compact indices
+            const occIdx = OCCASION_LIST.indexOf(occ); // 0..2 or -1 if custom
+            const themeIdx = Math.max(0, THEME_LIST.indexOf(appState.theme)); // 0..2
+            const voiceIdx = Math.max(0, VOICE_LIST.indexOf(appState.voicePersona)); // 0..4
+            const presetIdx = matchedPreset >= 0 ? matchedPreset : 9; // 0..5 or 9 for custom text
+
+            // Base URL from current browser location
             const baseUrl = window.location.origin !== "null"
                 ? (window.location.origin + window.location.pathname)
-                : "https://yourusername.github.io/surprise/";
+                : "https://ashfaqshikalkar29-cloud.github.io/birthday-surprise/";
 
             let finalUrl = "";
             const urlFormatLabel = document.getElementById('urlFormatLabel');
 
             if (isSecret) {
-                const payload = {
-                    n: appState.name,
-                    o: appState.occasion,
-                    m: appState.message,
-                    t: appState.theme,
-                    v: appState.voicePersona
-                };
-                const encoded = encodePayloadBase64(payload);
-                finalUrl = `${baseUrl}?s=${encoded}`;
-                urlFormatLabel.innerHTML = `<i class="fa-solid fa-lock text-emerald-400 mr-1"></i>Spoiler-Free Secret Link`;
+                // Micro packed string: Name~occIdx~themeIdx~voiceIdx~presetIdx(~customOcc)(~customMsg)
+                const occPart = occIdx >= 0 ? String(occIdx) : occ;
+                const msgPart = presetIdx < 9 ? String(presetIdx) : appState.message;
+                let micro = `${appState.name}~${occPart}~${themeIdx}${voiceIdx}~${msgPart}`;
+                if (appState.userGeminiKey) {
+                    micro += `~${obfuscateKey(appState.userGeminiKey)}`;
+                }
+                finalUrl = `${baseUrl}?u=${toBase64Url(micro)}`;
+                urlFormatLabel.innerHTML = `<i class="fa-solid fa-user-secret text-purple-400 mr-1"></i>Spoiler-Free Micro Link`;
             } else {
-                const params = new URLSearchParams();
-                params.set('name', appState.name);
-                params.set('occ', appState.occasion);
-                if (rawMsg) params.set('msg', rawMsg);
-                params.set('theme', appState.theme);
-                params.set('voice', appState.voicePersona);
-                finalUrl = `${baseUrl}?${params.toString()}`;
-                urlFormatLabel.innerHTML = `<i class="fa-solid fa-link text-cyan-400 mr-1"></i>Standard Readable Link`;
+                // Ultra-Short Readable Link: ?n=Alex (if all defaults) or ?n=Alex&c=0000
+                const code = `${occIdx >= 0 ? occIdx : 9}${themeIdx}${voiceIdx}${presetIdx}`;
+                let query = `?n=${encodeURIComponent(appState.name)}`;
+                if (code !== "0000") {
+                    query += `&c=${code}`;
+                }
+                if (occIdx === -1) {
+                    query += `&o=${encodeURIComponent(occ)}`;
+                }
+                if (presetIdx === 9) {
+                    query += `&m=${toBase64Url(appState.message)}`;
+                }
+                if (appState.userGeminiKey) {
+                    query += `&k=${obfuscateKey(appState.userGeminiKey)}`;
+                }
+                finalUrl = `${baseUrl}${query}`;
+                urlFormatLabel.innerHTML = `<i class="fa-solid fa-bolt text-emerald-400 mr-1"></i>Ultra-Compact Link`;
             }
 
             document.getElementById('generatedUrlInput').value = finalUrl;
+            document.getElementById('shortStatusTag').textContent = "Ready to share";
+            updateCharCountBadge(finalUrl.length, false);
         }
 
-        function checkUrlParamsOnLoad() {
-            const params = new URLSearchParams(window.location.search);
-            const secretParam = params.get('s');
-            const nameParam = params.get('name');
+        function updateCharCountBadge(len, isShortened) {
+            const pill = document.getElementById('charCountPill');
+            if (!pill) return;
+            if (isShortened) {
+                pill.className = "text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-emerald-500/25 border border-emerald-400 text-emerald-200 font-bold";
+                pill.textContent = `⚡ ${len} chars • Shortened!`;
+            } else if (len <= 78) {
+                pill.className = "text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 font-semibold";
+                pill.textContent = `${len} chars • Ultra-Short`;
+            } else {
+                pill.className = "text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 font-semibold";
+                pill.textContent = `${len} chars • Click ⚡ Shorten`;
+            }
+        }
 
-            if (secretParam) {
-                const decoded = decodePayloadBase64(secretParam);
-                if (decoded) {
-                    appState.name = decoded.n || "Friend";
-                    appState.occasion = decoded.o || "Happy Birthday 🎂";
-                    appState.message = decoded.m || WISH_TEMPLATES[0];
-                    appState.theme = decoded.t || "neon";
-                    appState.voicePersona = decoded.v || "bestie";
+        /* ----------------------------------------------------
+         * 4. BUILT-IN 1-CLICK LINK SHORTENER (is.gd / v.gd JSONP)
+         * ---------------------------------------------------- */
+        function shortenUrlViaJsonp(targetUrl, provider = "is.gd") {
+            return new Promise((resolve, reject) => {
+                const cbName = "isgd_cb_" + Math.random().toString(36).substring(2, 9);
+                const script = document.createElement("script");
+                const timer = setTimeout(() => {
+                    cleanup();
+                    reject(new Error("Timeout"));
+                }, 6500);
+
+                function cleanup() {
+                    clearTimeout(timer);
+                    delete window[cbName];
+                    if (script.parentNode) script.parentNode.removeChild(script);
+                }
+
+                window[cbName] = function (data) {
+                    cleanup();
+                    if (data && data.shorturl) {
+                        resolve(data.shorturl);
+                    } else {
+                        reject(new Error(data?.errormessage || "Shorten error"));
+                    }
+                };
+
+                script.onerror = () => {
+                    cleanup();
+                    reject(new Error("Script error"));
+                };
+
+                script.src = `https://${provider}/create.php?format=json&callback=${cbName}&url=${encodeURIComponent(targetUrl)}`;
+                document.body.appendChild(script);
+            });
+        }
+
+        async function shortenWithIsGd() {
+            updateGeneratedLink();
+            const longUrl = document.getElementById('generatedUrlInput').value;
+
+            // If running on a local file:// or non-public URL, warn gently
+            if (!longUrl.startsWith("http://") && !longUrl.startsWith("https://")) {
+                showToast("Host on GitHub Pages first so is.gd can shorten your public URL!");
+                return;
+            }
+
+            // Return cached short URL if unchanged
+            if (appState.lastShortenedForUrl === longUrl && appState.lastShortUrl) {
+                document.getElementById('generatedUrlInput').value = appState.lastShortUrl;
+                updateCharCountBadge(appState.lastShortUrl.length, true);
+                copyRawInputToClipboard();
+                return;
+            }
+
+            const btnText = document.getElementById('shortenerBtnText');
+            const btnIcon = document.getElementById('shortenerIcon');
+            btnText.textContent = "Shortening...";
+            btnIcon.className = "fa-solid fa-spinner fa-spin";
+
+            try {
+                let shortUrl = "";
+                try {
+                    shortUrl = await shortenUrlViaJsonp(longUrl, "is.gd");
+                } catch (e1) {
+                    shortUrl = await shortenUrlViaJsonp(longUrl, "v.gd");
+                }
+
+                if (shortUrl) {
+                    appState.lastShortenedForUrl = longUrl;
+                    appState.lastShortUrl = shortUrl;
+                    document.getElementById('generatedUrlInput').value = shortUrl;
+                    document.getElementById('shortStatusTag').textContent = "Shortened via is.gd ✓";
+                    updateCharCountBadge(shortUrl.length, true);
+                    copyRawInputToClipboard();
+                    showToast(`Shortened to ${shortUrl} & Copied! ⚡`);
+                }
+            } catch (err) {
+                showToast("Compact link copied! (Shortener requires a live public domain)");
+                copyRawInputToClipboard();
+            } finally {
+                btnText.textContent = "⚡ Shorten (is.gd)";
+                btnIcon.className = "fa-solid fa-compress";
+            }
+        }
+
+        /* ----------------------------------------------------
+         * 5. PARSE URL PARAMETERS ON PAGE LOAD
+         * ---------------------------------------------------- */
+        function checkUrlParamsOnLoad() {
+            loadSavedGeminiKey();
+            const params = new URLSearchParams(window.location.search);
+
+            // 1. Check Micro Spoiler-Free format (?u=...)
+            const microParam = params.get('u');
+            if (microParam) {
+                const decoded = fromBase64Url(microParam);
+                if (decoded && decoded.includes('~')) {
+                    const parts = decoded.split('~');
+                    appState.name = parts[0] || "Friend";
+                    const occPart = parts[1] || "0";
+                    const occIdx = parseInt(occPart, 10);
+                    appState.occasion = (!isNaN(occIdx) && OCCASION_LIST[occIdx]) ? OCCASION_LIST[occIdx] : occPart;
+
+                    const tvCode = parts[2] || "00";
+                    appState.theme = THEME_LIST[parseInt(tvCode[0], 10)] || "neon";
+                    appState.voicePersona = VOICE_LIST[parseInt(tvCode[1], 10)] || "Kore";
+
+                    const msgPart = parts[3] ?? "0";
+                    const pIdx = parseInt(msgPart, 10);
+                    if (!isNaN(pIdx) && String(pIdx) === msgPart && WISH_TEMPLATES[pIdx]) {
+                        appState.message = WISH_TEMPLATES[pIdx];
+                    } else {
+                        appState.message = msgPart || WISH_TEMPLATES[0];
+                    }
+
+                    if (parts[4]) {
+                        appState.embeddedKey = deobfuscateKey(parts[4]);
+                    }
+
+                    applyTheme(appState.theme);
+                    selectVoicePersona(appState.voicePersona, false);
+                    updateKeyStatusUI();
+                    enterSurpriseTeaserMode();
+                    return;
+                }
+            }
+
+            // 2. Check Ultra-Short Readable format (?n=Name&c=0000)
+            const nParam = params.get('n') || params.get('to') || params.get('name');
+            if (nParam) {
+                appState.name = nParam.trim() || "Friend";
+                const code = params.get('c') || "0000";
+                const occDigit = parseInt(code[0] || "0", 10);
+                const themeDigit = parseInt(code[1] || "0", 10);
+                const voiceDigit = parseInt(code[2] || "0", 10);
+                const presetDigit = parseInt(code[3] || "0", 10);
+
+                // Occasion
+                if (occDigit < 3 && OCCASION_LIST[occDigit]) {
+                    appState.occasion = OCCASION_LIST[occDigit];
+                } else {
+                    appState.occasion = params.get('o') || params.get('occ') || OCCASION_LIST[0];
+                }
+
+                // Theme & Voice
+                appState.theme = THEME_LIST[themeDigit] || params.get('theme') || "neon";
+                appState.voicePersona = VOICE_LIST[voiceDigit] || params.get('voice') || "Kore";
+
+                // Message
+                if (presetDigit < WISH_TEMPLATES.length && WISH_TEMPLATES[presetDigit]) {
+                    appState.message = WISH_TEMPLATES[presetDigit];
+                } else if (params.get('m')) {
+                    appState.message = fromBase64Url(params.get('m')) || params.get('m');
+                } else if (params.get('msg')) {
+                    appState.message = params.get('msg');
+                } else {
+                    appState.message = WISH_TEMPLATES[0];
+                }
+
+                // Optional embedded Gemini key
+                if (params.get('k')) {
+                    appState.embeddedKey = deobfuscateKey(params.get('k'));
+                }
+
+                applyTheme(appState.theme);
+                selectVoicePersona(appState.voicePersona, false);
+                updateKeyStatusUI();
+                enterSurpriseTeaserMode();
+                return;
+            }
+
+            // 3. Legacy Base64 (?s=...) support so old links still work
+            const legacySecret = params.get('s');
+            if (legacySecret) {
+                try {
+                    const obj = JSON.parse(decodeURIComponent(atob(legacySecret)));
+                    appState.name = obj.n || "Friend";
+                    appState.occasion = obj.o || OCCASION_LIST[0];
+                    appState.message = obj.m || WISH_TEMPLATES[0];
+                    appState.theme = obj.t || "neon";
+                    appState.voicePersona = VOICE_PERSONAS[obj.v] ? obj.v : "Kore";
                     applyTheme(appState.theme);
                     selectVoicePersona(appState.voicePersona, false);
                     enterSurpriseTeaserMode();
                     return;
-                }
-            } else if (nameParam) {
-                appState.name = nameParam.trim() || "Friend";
-                appState.occasion = params.get('occ') || "Happy Birthday 🎂";
-                appState.message = params.get('msg') || WISH_TEMPLATES[0];
-                appState.theme = params.get('theme') || "neon";
-                appState.voicePersona = params.get('voice') || "bestie";
-                applyTheme(appState.theme);
-                selectVoicePersona(appState.voicePersona, false);
-                enterSurpriseTeaserMode();
-                return;
+                } catch (e) {}
             }
 
             // Default: Initialize Creator Studio
             document.getElementById('friendNameInput').value = "Alex";
             document.getElementById('customMsgInput').value = WISH_TEMPLATES[0];
+            appState.presetIndex = 0;
             updateGeneratedLink();
         }
 
         /* ----------------------------------------------------
-         * 4. CREATOR FORM INTERACTIONS
+         * 6. CREATOR STUDIO CONTROLS
          * ---------------------------------------------------- */
         function fillSampleName(sampleName) {
             document.getElementById('friendNameInput').value = sampleName;
@@ -1200,7 +1588,7 @@
         }
 
         function selectVoicePersona(personaKey, shouldUpdateUrl = true) {
-            if (!VOICE_PERSONAS[personaKey]) personaKey = 'bestie';
+            if (!VOICE_PERSONAS[personaKey]) personaKey = 'Kore';
             appState.voicePersona = personaKey;
 
             document.querySelectorAll('.voice-btn').forEach(btn => {
@@ -1235,17 +1623,13 @@
                 btn.classList.remove('active-occ', 'border-pink-500', 'bg-pink-500/20', 'text-white');
                 btn.classList.add('border-white/10', 'bg-slate-900/50', 'text-slate-300');
                 const icon = btn.querySelector('i');
-                if (icon) {
-                    icon.className = 'fa-regular fa-circle text-slate-500 text-xs';
-                }
+                if (icon) icon.className = 'fa-regular fa-circle text-slate-500 text-xs';
             });
 
             btnEl.classList.add('active-occ', 'border-pink-500', 'bg-pink-500/20', 'text-white');
             btnEl.classList.remove('border-white/10', 'bg-slate-900/50', 'text-slate-300');
             const activeIcon = btnEl.querySelector('i');
-            if (activeIcon) {
-                activeIcon.className = 'fa-solid fa-circle-check text-pink-400 text-xs';
-            }
+            if (activeIcon) activeIcon.className = 'fa-solid fa-circle-check text-pink-400 text-xs';
 
             const customWrap = document.getElementById('customOccasionWrap');
             if (btnEl.getAttribute('data-occ') === 'CUSTOM') {
@@ -1258,11 +1642,13 @@
         }
 
         function cycleWishTemplate() {
-            appState.wishTemplateIndex = (appState.wishTemplateIndex + 1) % WISH_TEMPLATES.length;
+            const nextIdx = (appState.presetIndex + 1) % WISH_TEMPLATES.length;
+            appState.presetIndex = nextIdx;
             const msgInput = document.getElementById('customMsgInput');
-            msgInput.value = WISH_TEMPLATES[appState.wishTemplateIndex];
+            msgInput.value = WISH_TEMPLATES[nextIdx];
+            updatePresetBadgeUI();
             updateGeneratedLink();
-            showToast("Loaded new wish template! ✨");
+            showToast(`Loaded Preset Wish #${nextIdx + 1} (Ultra-Short URL!) ✨`);
         }
 
         function selectTheme(themeName) {
@@ -1286,34 +1672,34 @@
             document.documentElement.setAttribute('data-theme', themeName);
         }
 
-        function copyGeneratedLink() {
-            updateGeneratedLink();
+        function copyRawInputToClipboard() {
             const urlInput = document.getElementById('generatedUrlInput');
             urlInput.select();
             urlInput.setSelectionRange(0, 99999);
-
             try {
                 document.execCommand('copy');
-                showToast("Surprise Link copied to clipboard! 🎉");
                 const copyBtnText = document.getElementById('copyBtnText');
                 copyBtnText.textContent = "Copied! Ready to Paste";
                 setTimeout(() => {
                     copyBtnText.textContent = "Copy Surprise Link";
                 }, 2500);
-            } catch (err) {
-                showToast("Select the link box and press Ctrl+C to copy");
-            }
+            } catch (err) {}
+        }
+
+        function copyGeneratedLink() {
+            const urlInput = document.getElementById('generatedUrlInput');
+            if (!urlInput.value) updateGeneratedLink();
+            copyRawInputToClipboard();
+            showToast("Surprise Link copied to clipboard! 🎉");
         }
 
         function shareViaWhatsApp() {
-            updateGeneratedLink();
             const link = document.getElementById('generatedUrlInput').value;
             const text = `Hey ${appState.name}! 🎁 I made a special interactive surprise for you. Tap here to unwrap it: ${link}`;
             window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
         }
 
         function triggerNativeShare() {
-            updateGeneratedLink();
             const link = document.getElementById('generatedUrlInput').value;
             if (navigator.share) {
                 navigator.share({
@@ -1349,7 +1735,7 @@
         }
 
         /* ----------------------------------------------------
-         * 5. MODE SWITCHING & SURPRISE STAGE FLOW
+         * 7. SURPRISE STAGE FLOW & PRE-BUFFERING GEMINI VOICE
          * ---------------------------------------------------- */
         function launchPreviewFromCreator() {
             updateGeneratedLink();
@@ -1367,11 +1753,9 @@
             document.getElementById('teaserStage').classList.remove('hidden');
             document.getElementById('revealStage').classList.add('hidden');
 
-            // Reset gift box animation state
             const giftBox = document.getElementById('giftBoxTrigger');
             giftBox.classList.remove('gift-opening');
 
-            // Top header buttons
             document.getElementById('modeBadge').textContent = "Surprise Mode";
             document.getElementById('hostGuideBtn').classList.add('hidden');
             document.getElementById('audioToggleBtn').classList.remove('hidden');
@@ -1379,9 +1763,13 @@
             document.getElementById('quickSwitchBtn').classList.remove('hidden');
             document.getElementById('quickSwitchBtn').classList.add('flex');
 
-            // Set Teaser Name
             document.getElementById('teaserNameDisplay').textContent = appState.name;
             document.title = `🎁 A Surprise for ${appState.name}!`;
+
+            // Pre-buffer Gemini 2.5 Neural TTS while the gift box is shaking so playback is instant on tap!
+            const persona = VOICE_PERSONAS[appState.voicePersona] || VOICE_PERSONAS.Kore;
+            const mainScript = buildGreetingSpeechScript(appState.name, appState.occasion, appState.message);
+            prefetchGeminiTTSAudio(mainScript, persona);
         }
 
         function unwrapGiftBox() {
@@ -1389,43 +1777,34 @@
             if (giftBox.classList.contains('gift-opening')) return;
             giftBox.classList.add('gift-opening');
 
-            // Initialize Web Audio API & unlock SpeechSynthesis on user gesture
             initAudioEngine();
             unlockWebSpeechOnGesture();
             playUnwrapFanfare();
 
-            // Burst initial confetti from center
             burstConfetti(window.innerWidth / 2, window.innerHeight / 2, 110);
 
             setTimeout(() => {
                 document.getElementById('teaserStage').classList.add('hidden');
                 document.getElementById('revealStage').classList.remove('hidden');
 
-                // Populate Reveal Card
                 document.getElementById('revealOccasionText').textContent = appState.occasion;
                 document.getElementById('revealFriendName').textContent = `${appState.name}!`;
 
-                // Reset candles to lit state
                 relightAllCandles(false);
-
-                // Start typewriter message animation
                 typewriteMessage(appState.message);
-
-                // Spawn floating interactive balloons
                 spawnFloatingBalloons();
 
-                // Launch side confetti cannons
                 setTimeout(() => {
                     burstConfetti(window.innerWidth * 0.2, window.innerHeight * 0.6, 65);
                     burstConfetti(window.innerWidth * 0.8, window.innerHeight * 0.6, 65);
                 }, 300);
 
-                // Speak the personalized AI Voice Greeting aloud!
+                // Speak the personalized Gemini Neural Voice Greeting!
                 setTimeout(() => {
                     speakMainGreeting();
-                }, 400);
+                }, 350);
 
-                // Start Happy Birthday / Celebration synthesized melody (automatically ducked while voice speaks)
+                // Start Happy Birthday melody (ducked while Gemini voice speaks)
                 setTimeout(() => {
                     startCelebrationMelody();
                 }, 850);
@@ -1448,7 +1827,6 @@
             document.getElementById('quickSwitchBtn').classList.add('hidden');
             document.getElementById('quickSwitchBtn').classList.remove('flex');
 
-            // Populate form with current state so user can tweak easily
             document.getElementById('friendNameInput').value = appState.name;
             document.getElementById('customMsgInput').value = appState.message;
             updateGeneratedLink();
@@ -1472,7 +1850,7 @@
         }
 
         /* ----------------------------------------------------
-         * 6. INTERACTIVE CAKE CANDLES & MICROPHONE BLOWING
+         * 8. INTERACTIVE CAKE CANDLES & MICROPHONE BLOWING
          * ---------------------------------------------------- */
         function extinguishSingleCandle(index) {
             if (!appState.candlesLit[index]) return;
@@ -1488,7 +1866,6 @@
 
             playPopSound(520 + index * 60);
 
-            // Check if all candles are blown out
             if (appState.candlesLit.every(lit => !lit)) {
                 onAllCandlesBlownOut();
             }
@@ -1519,13 +1896,11 @@
 
             document.getElementById('candleInstructionText').innerHTML = `<i class="fa-solid fa-star text-amber-300"></i> <span>All candles blown out! Happy celebrating, ${appState.name}!</span>`;
 
-            // Extra fireworks confetti burst & wish chime
             triggerMegaCelebration();
             playWishMadeChime();
 
-            // Trigger AI Voice Cheer for blowing out the candles!
             if (appState.soundEnabled) {
-                const cheerScript = `Woohoo! Amazing job ${appState.name}! May all your biggest wishes come true!`;
+                const cheerScript = `Woohoo! Amazing job, ${appState.name}! May every single one of your wishes come true!`;
                 speakTextWithAI(cheerScript);
             }
         }
@@ -1581,13 +1956,9 @@
                 const checkVolume = () => {
                     if (!appState.micAnalyser) return;
                     analyser.getByteFrequencyData(dataArray);
-                    // Low-frequency wind/blow energy average
                     let sum = 0;
-                    for (let i = 0; i < 25; i++) {
-                        sum += dataArray[i];
-                    }
-                    const avg = sum / 25;
-                    if (avg > 95) {
+                    for (let i = 0; i < 25; i++) sum += dataArray[i];
+                    if (sum / 25 > 95) {
                         blowOutAllCandles();
                         return;
                     }
@@ -1616,42 +1987,7 @@
         }
 
         /* ----------------------------------------------------
-         * 7. SYNTHESIZED WEB AUDIO API SOUND & MELODY ENGINE
-         * ---------------------------------------------------- */
-        function initAudioEngine() {
-            if (!appState.audioCtx) {
-                const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-                if (AudioContextClass) {
-                    appState.audioCtx = new AudioContextClass();
-                }
-            }
-            if (appState.audioCtx && appState.audioCtx.state === 'suspended') {
-                appState.audioCtx.resume();
-            }
-        }
-
-        function toggleSound() {
-            appState.soundEnabled = !appState.soundEnabled;
-            const icon = document.getElementById('audioIcon');
-            const label = document.getElementById('audioLabel');
-
-            if (appState.soundEnabled) {
-                icon.className = 'fa-solid fa-volume-high text-pink-400';
-                label.textContent = 'Sound On';
-                initAudioEngine();
-                startCelebrationMelody();
-                speakMainGreeting();
-            } else {
-                icon.className = 'fa-solid fa-volume-xmark text-slate-400';
-                label.textContent = 'Muted';
-                stopMelody();
-                stopAllVoiceSpeech();
-            }
-        }
-
-        /* ----------------------------------------------------
-         * 7B. DUAL-ENGINE AI VOICE GREETING SYSTEM
-         *     (Gemini 2.5 TTS + Web Speech Neural Fallback)
+         * 9. REAL GEMINI 2.5 FLASH TTS ENGINE + NEURAL FALLBACK
          * ---------------------------------------------------- */
         let cachedBrowserVoices = [];
         if ('speechSynthesis' in window) {
@@ -1685,7 +2021,7 @@
             const cleanOcc = stripEmojisForSpeech(occasion) || "Happy Birthday";
             const cleanName = stripEmojisForSpeech(name) || "my friend";
             const cleanMsg = stripEmojisForSpeech(message);
-            return `Surprise! ${cleanOcc}, ${cleanName}! ${cleanMsg} Now make a wish and blow out the candles on your cake!`;
+            return `Surprise! ${cleanOcc}, ${cleanName}! ${cleanMsg} Now make a big wish, and blow out the candles on your cake!`;
         }
 
         function speakMainGreeting() {
@@ -1709,14 +2045,14 @@
 
             if (isSpeaking) {
                 if (pill) pill.classList.add('speaking-active');
-                if (statusText) statusText.textContent = statusLabel || `Wishing ${appState.name}...`;
+                if (statusText) statusText.textContent = statusLabel || `Gemini Voice (${appState.voicePersona}) speaking...`;
                 if (testBtnIcon) testBtnIcon.className = 'fa-solid fa-stop text-rose-400';
                 if (testBtnLabel) testBtnLabel.textContent = 'Stop Voice';
             } else {
                 if (pill) pill.classList.remove('speaking-active');
-                if (statusText) statusText.textContent = `AI Voice (${VOICE_PERSONAS[appState.voicePersona]?.label || 'Cheerful'})`;
+                if (statusText) statusText.textContent = `Gemini Voice (${appState.voicePersona})`;
                 if (testBtnIcon) testBtnIcon.className = 'fa-solid fa-volume-high';
-                if (testBtnLabel) testBtnLabel.textContent = 'Test AI Voice';
+                if (testBtnLabel) testBtnLabel.textContent = 'Test Gemini Voice';
             }
         }
 
@@ -1736,36 +2072,49 @@
             setVoiceSpeakingUI(false);
         }
 
+        async function prefetchGeminiTTSAudio(textToSpeak, persona) {
+            const cacheKey = `${persona.geminiVoice}::${textToSpeak}`;
+            if (appState.ttsCache[cacheKey]) return appState.ttsCache[cacheKey];
+            try {
+                const wavUrl = await fetchGeminiTTSAudio(textToSpeak, persona);
+                if (wavUrl) {
+                    appState.ttsCache[cacheKey] = wavUrl;
+                    return wavUrl;
+                }
+            } catch (e) {}
+            return null;
+        }
+
         async function speakTextWithAI(textToSpeak) {
             stopAllVoiceSpeech();
-            const persona = VOICE_PERSONAS[appState.voicePersona] || VOICE_PERSONAS.bestie;
-            setVoiceSpeakingUI(true, `🎙️ Wishing ${appState.name}...`);
+            const persona = VOICE_PERSONAS[appState.voicePersona] || VOICE_PERSONAS.Kore;
+            setVoiceSpeakingUI(true, `🎙️ Generating Gemini Voice (${persona.geminiVoice})...`);
 
-            // 1. Try Gemini 2.5 Flash Preview TTS if an environment API key is configured
-            const apiKey = ""; // Leave as-is; Canvas injects if available, or falls back on static GitHub Pages
-            if (apiKey && apiKey.trim() !== "") {
-                try {
-                    const audioUrl = await fetchGeminiTTSAudio(textToSpeak, persona);
-                    if (audioUrl) {
-                        const audio = new Audio(audioUrl);
-                        appState.activeAudioElement = audio;
-                        audio.onended = () => setVoiceSpeakingUI(false);
-                        audio.onerror = () => speakWithWebSpeechFallback(textToSpeak, persona);
-                        await audio.play();
-                        return;
-                    }
-                } catch (err) {
-                    // Fallback seamlessly to Web Speech API
+            // 1. Always attempt Real Gemini 2.5 Flash Preview TTS first!
+            try {
+                const wavUrl = await prefetchGeminiTTSAudio(textToSpeak, persona);
+                if (wavUrl) {
+                    const audio = new Audio(wavUrl);
+                    appState.activeAudioElement = audio;
+                    setVoiceSpeakingUI(true, `✨ Gemini (${persona.geminiVoice}) Wishing ${appState.name}...`);
+                    audio.onended = () => setVoiceSpeakingUI(false);
+                    audio.onerror = () => speakWithWebSpeechFallback(textToSpeak, persona);
+                    await audio.play();
+                    return;
                 }
+            } catch (err) {
+                // Fall back to Neural Web Speech API if on static GitHub Pages without a key
             }
 
-            // 2. Seamless Web Speech API Neural/Natural Synthesizer (Works 100% free on GitHub Pages)
+            // 2. High-Quality Neural Browser Voice Fallback
             speakWithWebSpeechFallback(textToSpeak, persona);
         }
 
         async function fetchGeminiTTSAudio(textToSpeak, persona) {
-            const apiKey = "";
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
+            const apiKey = ""; // Canvas runtime auto-injects when empty
+            const activeKey = appState.userGeminiKey || appState.embeddedKey || apiKey;
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${activeKey}`;
+
             const payload = {
                 contents: [{
                     parts: [{ text: `${persona.stylePrompt} ${textToSpeak}` }]
@@ -1774,22 +2123,22 @@
                     responseModalities: ["AUDIO"],
                     speechConfig: {
                         voiceConfig: {
-                            prebuiltVoiceConfig: { voiceName: persona.geminiVoice || "Leda" }
+                            prebuiltVoiceConfig: { voiceName: persona.geminiVoice || "Kore" }
                         }
                     }
                 },
                 model: "gemini-2.5-flash-preview-tts"
             };
 
-            let delay = 1000;
-            for (let attempt = 0; attempt < 3; attempt++) {
+            let delay = 800;
+            for (let attempt = 0; attempt < 2; attempt++) {
                 try {
                     const response = await fetch(apiUrl, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)
                     });
-                    if (!response.ok) throw new Error("TTS HTTP error");
+                    if (!response.ok) throw new Error("TTS HTTP status " + response.status);
                     const result = await response.json();
                     const part = result?.candidates?.[0]?.content?.parts?.[0];
                     const audioData = part?.inlineData?.data;
@@ -1805,7 +2154,7 @@
                     }
                     break;
                 } catch (e) {
-                    if (attempt === 2) throw e;
+                    if (attempt === 1) throw e;
                     await new Promise(r => setTimeout(r, delay));
                     delay *= 2;
                 }
@@ -1850,33 +2199,31 @@
             return new Blob([buffer], { type: 'audio/wav' });
         }
 
-        function pickBestBrowserVoice(persona) {
+        function pickBestBrowserVoice() {
             if (!('speechSynthesis' in window)) return null;
             const voices = cachedBrowserVoices.length > 0
                 ? cachedBrowserVoices
                 : window.speechSynthesis.getVoices();
             if (!voices || voices.length === 0) return null;
 
-            // Score voices based on persona language preferences & natural/neural quality
             let bestVoice = null;
-            let bestScore = -1;
+            let bestScore = -999;
 
             voices.forEach(voice => {
                 let score = 0;
                 const vLang = (voice.lang || '').toLowerCase();
                 const vName = (voice.name || '').toLowerCase();
 
-                // Language match
-                const langIndex = persona.langPref.findIndex(lp => vLang.startsWith(lp.toLowerCase()));
-                if (langIndex === 0) score += 50;
-                else if (langIndex > 0) score += 30;
+                if (vLang.startsWith('en-us') || vLang.startsWith('en-gb') || vLang.startsWith('en-in')) score += 30;
                 else if (vLang.startsWith('en')) score += 15;
+                else score -= 100;
 
-                // Prioritize high-quality Natural / Neural / Google / Siri voices
-                if (vName.includes('natural') || vName.includes('online')) score += 35;
-                if (vName.includes('google')) score += 28;
-                if (vName.includes('aria') || vName.includes('jenny') || vName.includes('neerja') || vName.includes('samantha') || vName.includes('siri')) score += 25;
-                if (vName.includes('female') || vName.includes('zira') || vName.includes('veena') || vName.includes('karen')) score += 12;
+                // Strongly prefer Cloud Neural / Natural voices over legacy desktop robotic voices
+                if (vName.includes('natural') || vName.includes('online')) score += 80;
+                if (vName.includes('neural') || vName.includes('premium') || vName.includes('enhanced')) score += 60;
+                if (vName.includes('google')) score += 50;
+                if (vName.includes('aria') || vName.includes('jenny') || vName.includes('sonia') || vName.includes('samantha') || vName.includes('siri')) score += 40;
+                if (vName.includes('desktop') || vName.includes('espeak') || vName.includes('david') || vName.includes('mark')) score -= 45;
 
                 if (score > bestScore) {
                     bestScore = score;
@@ -1896,15 +2243,15 @@
             try {
                 window.speechSynthesis.cancel();
                 const utterance = new SpeechSynthesisUtterance(textToSpeak);
-                const selectedVoice = pickBestBrowserVoice(persona);
+                const selectedVoice = pickBestBrowserVoice();
                 if (selectedVoice) {
                     utterance.voice = selectedVoice;
                     utterance.lang = selectedVoice.lang;
                 } else {
-                    utterance.lang = persona.langPref[0] || 'en-US';
+                    utterance.lang = 'en-US';
                 }
 
-                utterance.pitch = persona.pitch || 1.05;
+                utterance.pitch = persona.pitch || 1.04;
                 utterance.rate = persona.rate || 1.0;
                 utterance.volume = 1.0;
 
@@ -1915,6 +2262,40 @@
                 window.speechSynthesis.speak(utterance);
             } catch (e) {
                 setVoiceSpeakingUI(false);
+            }
+        }
+
+        /* ----------------------------------------------------
+         * 10. WEB AUDIO API MELODY & SOUND EFFECTS ENGINE
+         * ---------------------------------------------------- */
+        function initAudioEngine() {
+            if (!appState.audioCtx) {
+                const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                if (AudioContextClass) {
+                    appState.audioCtx = new AudioContextClass();
+                }
+            }
+            if (appState.audioCtx && appState.audioCtx.state === 'suspended') {
+                appState.audioCtx.resume();
+            }
+        }
+
+        function toggleSound() {
+            appState.soundEnabled = !appState.soundEnabled;
+            const icon = document.getElementById('audioIcon');
+            const label = document.getElementById('audioLabel');
+
+            if (appState.soundEnabled) {
+                icon.className = 'fa-solid fa-volume-high text-pink-400';
+                label.textContent = 'Sound On';
+                initAudioEngine();
+                startCelebrationMelody();
+                speakMainGreeting();
+            } else {
+                icon.className = 'fa-solid fa-volume-xmark text-slate-400';
+                label.textContent = 'Muted';
+                stopMelody();
+                stopAllVoiceSpeech();
             }
         }
 
@@ -1969,7 +2350,6 @@
             if (!appState.soundEnabled) return;
             initAudioEngine();
 
-            // Happy Birthday Melody Notes (Frequency in Hz, Duration in sec)
             const melody = [
                 { f: 261.63, d: 0.3 }, { f: 261.63, d: 0.25 }, { f: 293.66, d: 0.55 }, { f: 261.63, d: 0.55 }, { f: 349.23, d: 0.55 }, { f: 329.63, d: 0.95 },
                 { f: 261.63, d: 0.3 }, { f: 261.63, d: 0.25 }, { f: 293.66, d: 0.55 }, { f: 261.63, d: 0.55 }, { f: 392.00, d: 0.55 }, { f: 349.23, d: 0.95 },
@@ -1984,12 +2364,11 @@
                     return;
                 }
                 const note = melody[noteIdx];
-                // Audio Ducking: lower melody volume smoothly while AI voice is speaking
-                const mainVol = appState.isSpeaking ? 0.025 : 0.12;
-                const harmVol = appState.isSpeaking ? 0.008 : 0.04;
+                // Audio Ducking: keep melody whisper-quiet while Gemini Voice is speaking
+                const mainVol = appState.isSpeaking ? 0.022 : 0.12;
+                const harmVol = appState.isSpeaking ? 0.006 : 0.04;
 
                 playSynthNote(note.f, note.d * 0.9, 0, 'triangle', mainVol);
-                // Subtle warm harmonic octave
                 playSynthNote(note.f * 2, note.d * 0.6, 0, 'sine', harmVol);
 
                 noteIdx = (noteIdx + 1) % melody.length;
@@ -2007,7 +2386,7 @@
         }
 
         /* ----------------------------------------------------
-         * 8. FLOATING INTERACTIVE BALLOONS
+         * 11. FLOATING BALLOONS & CONFETTI ENGINE
          * ---------------------------------------------------- */
         function spawnFloatingBalloons() {
             const container = document.getElementById('balloonsContainer');
@@ -2039,7 +2418,7 @@
                     </svg>
                 `;
 
-                balloon.onclick = (e) => {
+                balloon.onclick = () => {
                     const rect = balloon.getBoundingClientRect();
                     burstConfetti(rect.left + rect.width / 2, rect.top + rect.height / 2, 28);
                     playPopSound(780);
@@ -2056,9 +2435,6 @@
             container.classList.add('hidden');
         }
 
-        /* ----------------------------------------------------
-         * 9. HTML5 CANVAS CONFETTI & FIREWORKS ENGINE
-         * ---------------------------------------------------- */
         const canvas = document.getElementById('confettiCanvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -2149,7 +2525,7 @@
         }
 
         /* ----------------------------------------------------
-         * 10. INITIALIZE ON WINDOW LOAD
+         * 12. INITIALIZE ON WINDOW LOAD
          * ---------------------------------------------------- */
         window.onload = function () {
             checkUrlParamsOnLoad();
